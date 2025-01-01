@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.core.management import call_command
+
 from catalog.models import Category, Product
 
 
@@ -15,9 +15,9 @@ class Command(BaseCommand):
         category, _ = Category.objects.get_or_create(name='Категория1')
 
         products = [
-            {'name': 'Продукт1', 'description': 'Описание продукта1', 'price': 100, 'category': category},
-            {'name': 'Продукт2', 'description': 'Описание продукта1', 'price': 200, 'category': category},
-            {'name': 'Продукт3', 'description': 'Описание продукта1', 'price': 300, 'category': category},
+            {'name': 'Продукт1', 'stock': 1, 'description': 'Описание продукта1', 'price': 100, 'category': category},
+            {'name': 'Продукт2', 'stock': 1, 'description': 'Описание продукта1', 'price': 200, 'category': category},
+            {'name': 'Продукт3', 'stock': 1, 'description': 'Описание продукта1', 'price': 300, 'category': category},
         ]
 
         # Создание продуктов
