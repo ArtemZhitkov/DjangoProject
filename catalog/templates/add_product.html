@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% setTimeout(function() {
+     window.location.href ="{% url 'catalog:home' %}")}, 5000) %}
+
+{% block title %}Добавить продукт{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="display-4 text-center">Добавить продукт</h1>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group m-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Название продукта</span>
+                    <input type="text" name="name" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                <div class="input-group m-3">
+                    <span class="input-group-text">Описание</span>
+                    <textarea name="description" class="form-control" aria-label="Описание"></textarea>
+                </div>
+                <div class="input-group m-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Количество</span>
+                    <input type="text" name="stock" title="Используйте числовой формат" pattern="^[0-9]+$" class="form-control"
+                           aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default">
+                </div>
+                    <select class="form-select m-3" name="category" aria-label="Default select example">
+                        <option selected>Выберите категорию</option>
+                        {% for category in categories %}
+                        <option value="{{ category.pk }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                <div class="m-3">
+                    <label for="formFile" class="form-label">Загрузите изображение продукта</label>
+                    <input class="form-control" type="file" name="image" id="formFile">
+                </div>
+                <div class="input-group m-3">
+                    <span class="input-group-text">Цена</span>
+                    <input type="text" name="price" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <span class="input-group-text">.00</span>
+                </div>
+                <button type="submit" class="btn btn-primary m-3">Добавить</button>
+                <a href="{% url 'catalog:home' %}" class="btn btn-secondary m-3">Отменить</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
