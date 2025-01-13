@@ -18,7 +18,7 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
 
-class ContactView(TemplateView):
+class ContactTemplateView(TemplateView):
     template_name = 'catalog/contacts.html'
 
     def get_context_data(self, **kwargs):
