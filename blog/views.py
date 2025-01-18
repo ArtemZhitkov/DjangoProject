@@ -31,8 +31,14 @@ class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'content', 'preview']
     template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:post_list')
-    initial = {'published': True}  # дефолтное значение опубликованности
+    success_url = reverse_lazy('blog:home')
+
+    def form_valid(self, form): # изменение флага опубликованости при сохранении
+        post = form.save(commit=True)
+        post.published = True
+        post.save()
+        return super().form_valid(form)
+
 
 
 class PostUpdateView(UpdateView):
@@ -41,9 +47,19 @@ class PostUpdateView(UpdateView):
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('blog:post_detail')
 
+    def get_success_url(self):
+        post = self.get_object()
+        return reverse_lazy('blog:post_detail', kwargs={'pk': post.pk})
+
+    def form_valid(self, form):
+        post = form.save(commit=True)
+        post.published = True
+        post.save()
+        return super().form_valid(form)
+
 
 class PostDeleteView(DeleteView):
     model = Post
     template_name = 'blog/post_delete_confirm.html'
-    success_url = reverse_lazy('blog:post_list')
+    success_url = reverse_lazy('blog:home')
     context_object_name = 'post'
