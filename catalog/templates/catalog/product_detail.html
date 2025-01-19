@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 {% load my_tags %}
 
 {% block title %}Информация о продукте{% endblock %}
@@ -12,7 +12,8 @@
     <p class="card-text">{{ product.description }}</p>
     <p class="card-text"><small class="text-body-secondary">Last updated {{ product.updated_at }}</small></p>
       <a href="{% url 'catalog:home' %}" class="btn btn-primary">Вернуться назад</a>
-      <a href="#" class="btn btn-primary">Добавить в корзину</a>
+      <a href="{% url 'catalog:edit_product' product.pk %}" class="btn btn-secondary">Изменить</a>
+      <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-danger">Удалить</a>
   </div>
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 {% load my_tags %}
 
 {% block title %}Список продуктов{% endblock %}
@@ -16,7 +16,7 @@
     <div class="container">
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for product in page_obj.object_list %}
+            {% for product in products %}
             <div class="col">
                 <div class="card shadow-sm">
                     <img src="{{ product.image | media_filter }}" class="card-img-top" alt="{{ product.name }}">

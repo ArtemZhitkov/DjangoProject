@@ -1,0 +1,37 @@
+{% extends 'blog/base.html' %}
+{% load my_tags %}
+
+{% block title %}Список постов{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="display-4 text-center">Список постов</h1>
+            {% for post in posts %}
+            <div class="card mb-3">
+                <img src="{{ post.preview | media_filter }}" class="card-img-top" alt="{{ post.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+                    <p class="card-text"><small class="text-body-secondary">{{ post.created_at }}</small></p>
+                    <p class="card-text"><small class="text-body-secondary">{{ post.views_count }}</small></p>
+                    <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<center>
+    {%if page_obj.has_previous %} {# whether the previous page exists #}
+    <a href="?page={{page_obj.previous_page_number}}" class="btn btn-primary">Previous</a> {# link to the prev page #}
+    {% endif %}
+    <span class="btn btn-primary">{{page_obj.number}}</span> {# the current page number #}
+
+    {%if page_obj.has_next %} {# whether the next page exists #}
+    <a href="?page={{page_obj.next_page_number}}" class="btn btn-primary">Next</a> {# link to the next page #}
+    {% endif %}
+</center>
+{% endblock %}
