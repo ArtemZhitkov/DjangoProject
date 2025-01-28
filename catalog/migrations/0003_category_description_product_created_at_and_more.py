@@ -7,24 +7,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0002_alter_product_options'),
+        ("catalog", "0002_alter_product_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='category',
-            name='description',
-            field=models.TextField(blank=True, verbose_name='Описание категории'),
+            model_name="category",
+            name="description",
+            field=models.TextField(blank=True, verbose_name="Описание категории"),
         ),
         migrations.AddField(
-            model_name='product',
-            name='created_at',
-            field=models.DateField(auto_now_add=True, default=django.utils.timezone.now, verbose_name='Дата создания'),
+            model_name="product",
+            name="created_at",
+            field=models.DateField(
+                auto_now_add=True,
+                default=django.utils.timezone.now,
+                verbose_name="Дата создания",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='product',
-            name='updated_at',
-            field=models.DateField(auto_now=True, verbose_name='Дата изменения'),
+            model_name="product",
+            name="updated_at",
+            field=models.DateField(auto_now=True, verbose_name="Дата изменения"),
         ),
     ]
