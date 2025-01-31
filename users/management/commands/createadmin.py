@@ -13,7 +13,7 @@ class Command(BaseCommand):
             first_name='Admin',
             last_name='Adminex',
         )
-        user.set_password('admin123')
+        user.set_password('admin')
         user.is_staff = True
         user.is_superuser = True
         user.save()
