@@ -2,8 +2,9 @@ import secrets
 from django.shortcuts import get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
-from .forms import CustomUserCreationForm
+from django.views.generic import CreateView, UpdateView, DetailView
+from .forms import CustomUserCreationForm, CustomUserEditForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from config.settings import EMAIL_HOST_USER
 from .models import CustomUser
 
@@ -47,4 +48,22 @@ def email_verification(request, token):
     user.is_active = True
     user.save()
     return redirect(reverse('users:login'))
+
+
+class UserProfileUpdateView(UpdateView):
+    model = CustomUser
+    form_class = CustomUserEditForm
+    template_name = 'users/profile_edit.html'
+    login_url = reverse_lazy("users:login")
+    success_url = reverse_lazy('users:profile_detail')
+    context_object_name = 'user'
+
+    def get_success_url(self):
+        return reverse('users:profile_detail', kwargs={'pk': self.kwargs['pk']})
+
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
+    model = CustomUser
+    template_name = 'users/profile_detail.html'
+    login_url = reverse_lazy("users:login")
+    context_object_name = 'user'
 
