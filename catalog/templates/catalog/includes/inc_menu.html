@@ -22,6 +22,7 @@
                 {{ user.email }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'users:profile_detail' user.pk %}">Профиль</a></li>
                 <form method="post" action="{% url 'users:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="dropdown-item">Выйти</button>
