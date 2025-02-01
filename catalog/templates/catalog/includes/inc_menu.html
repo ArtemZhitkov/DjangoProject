@@ -11,7 +11,9 @@
         </li>
         <li class="nav-item"><a href="#" class="nav-link">Каталог</a></li>
         <li class="nav-item"><a href="{% url 'catalog:add_product' %}" class="nav-link">Добавить товар</a></li>
-        <li class="nav-item"><a href="{% url 'blog:home' %}" class="nav-link">Мой блог</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-item"><a href="{% url 'blog:home' %}" class="nav-link">Мой блог</a></li>
+        {% endif %}
         <li class="nav-item"><a href="{% url 'catalog:contacts' %}" class="nav-link">Контакты</a></li>
         {% if user.is_authenticated %}
         <li class="nav-item dropdown">
