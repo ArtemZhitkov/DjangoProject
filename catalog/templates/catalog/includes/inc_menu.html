@@ -7,10 +7,29 @@
     </a>
 
     <ul class="nav nav-pills">
-        <li class="nav-item"><a href="{% url 'catalog:home' %}" class="nav-link active" aria-current="page">Главная</a></li>
+        <li class="nav-item"><a href="{% url 'catalog:home' %}" class="nav-link active" aria-current="page">Главная</a>
+        </li>
         <li class="nav-item"><a href="#" class="nav-link">Каталог</a></li>
         <li class="nav-item"><a href="{% url 'catalog:add_product' %}" class="nav-link">Добавить товар</a></li>
-        <li class="nav-item"><a href="{% url 'blog:home' %}" class="nav-link">Мой блог</a></li>
+        {% if user.is_authenticated %}
+            <li class="nav-item"><a href="{% url 'blog:home' %}" class="nav-link">Мой блог</a></li>
+        {% endif %}
         <li class="nav-item"><a href="{% url 'catalog:contacts' %}" class="nav-link">Контакты</a></li>
-    </ul>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                {{ user.email }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="{% url 'users:profile_detail' user.pk %}">Профиль</a></li>
+                <form method="post" action="{% url 'users:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Выйти</button>
+                </form>
+            </ul>
+        {% else %}
+        <li class="nav-item"><a href="{% url 'users:register' %}" class="nav-link">Регистрация</a></li>
+        <li class="nav-item"><a href="{% url 'users:login' %}" class="nav-link">Войти</a></li>
+        {% endif %}
 </header>
