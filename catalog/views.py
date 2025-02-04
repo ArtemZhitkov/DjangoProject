@@ -1,12 +1,20 @@
-from django.http import HttpResponse
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+                                  TemplateView, UpdateView, View)
 
 from catalog.models import Product
+from .forms import ProductForm, ProductModeratorForm
 
-from .forms import ProductForm
+class ModeratorDeleteProductView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        product = get_object_or_404(Product, id=pk)
+        if not request.user.has_perm('product.can_delete_product'):
+            return HttpResponseForbidden('У Вас нет прав доступа!')
+        product.delete()
+        return redirect(reverse("catalog:home"))
 
 
 class ProductListView(ListView):
@@ -47,6 +55,13 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy("users:login")
     success_url = reverse_lazy("catalog:home")
 
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.owner = self.request.user
+        product.save()
+        return redirect(reverse("catalog:home"))
+
+
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
@@ -55,6 +70,14 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy("users:login")
     success_url = reverse_lazy("catalog:home")
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        elif user.has_perm("catalog.can_unpublish_product"):
+            return ProductModeratorForm
+
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
@@ -62,3 +85,4 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     login_url = reverse_lazy("users:login")
     success_url = reverse_lazy("catalog:home")
     context_object_name = "product"
+
