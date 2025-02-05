@@ -23,5 +23,4 @@ urlpatterns = [
         views.ProductDeleteView.as_view(),
         name="delete_product",
     ),
-    path("product/mod/delete/<int:pk>/", views.ModeratorDeleteProductView.as_view(), name="mod_product")
 ]

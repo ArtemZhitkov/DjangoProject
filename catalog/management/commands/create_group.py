@@ -9,7 +9,7 @@ class Command(BaseCommand):
         moderators_group = Group.objects.create(name="Moderators")
 
         publish_product = Permission.objects.get(codename="can_unpublish_product")
-        delete_product = Permission.objects.get(codename="can_delete_product")
+        delete_product = Permission.objects.get(codename="delete_product")
 
         moderators_group.permissions.add(publish_product, delete_product)
         moderators_group.save()

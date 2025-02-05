@@ -8,14 +8,6 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 from catalog.models import Product
 from .forms import ProductForm, ProductModeratorForm
 
-class ModeratorDeleteProductView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        product = get_object_or_404(Product, id=pk)
-        if not request.user.has_perm('product.can_delete_product'):
-            return HttpResponseForbidden('У Вас нет прав доступа!')
-        product.delete()
-        return redirect(reverse("catalog:home"))
-
 
 class ProductListView(ListView):
     model = Product
@@ -24,6 +16,12 @@ class ProductListView(ListView):
         "catalog/products_list.html"  # Имя шаблона для отображения списка продуктов
     )
     context_object_name = "products"
+
+    def get_queryset(self):  # фильтрация продуктов по опубликованным
+        user = self.request.user
+        if user.has_perm("catalog.can_unpublish_product"):
+            return Product.objects.all()
+        return Product.objects.filter(is_publish=True)
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -62,7 +60,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return redirect(reverse("catalog:home"))
 
 
-
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
@@ -78,7 +75,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             return ProductModeratorForm
 
 
-
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "catalog/product_delete_confirm.html"
@@ -86,3 +82,10 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("catalog:home")
     context_object_name = "product"
 
+    def post(self, request, pk):
+        product = get_object_or_404(Product, id=pk)
+        if request.user == product.owner or request.user.has_perm("catalog.delete_product"):
+            product.delete()
+            return redirect(reverse("catalog:home"))
+        else:
+            return HttpResponseForbidden("У Вас нет прав на удаление продукта!")
