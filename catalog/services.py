@@ -1,5 +1,6 @@
 from .models import Category, Product
 
+
 class CategoryService:
     @staticmethod
     def get_all_categories():
