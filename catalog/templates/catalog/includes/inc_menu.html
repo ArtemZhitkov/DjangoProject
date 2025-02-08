@@ -9,7 +9,7 @@
     <ul class="nav nav-pills">
         <li class="nav-item"><a href="{% url 'catalog:home' %}" class="nav-link active" aria-current="page">Главная</a>
         </li>
-        <li class="nav-item"><a href="#" class="nav-link">Каталог</a></li>
+        <li class="nav-item"><a href="{% url 'catalog:categories' %}" class="nav-link">Категории</a></li>
         <li class="nav-item"><a href="{% url 'catalog:add_product' %}" class="nav-link">Добавить товар</a></li>
         {% if user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'blog:home' %}" class="nav-link">Мой блог</a></li>
