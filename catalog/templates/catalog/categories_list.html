@@ -1,0 +1,21 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+
+{% block title %}Список категорий{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="display-4 text-center">Список категорий</h1>
+            {% for category in categories %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <p class="card-text">Описание: {{ category.description }}</p>
+                    <a href="{% url 'catalog:category_detail' category.pk %}" class="btn btn-primary">Просмотреть продукты</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+{% endblock %}
