@@ -1,12 +1,32 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView, View)
+                                  TemplateView, UpdateView)
 
-from catalog.models import Product
+from catalog.models import Product, Category
+from .services import CategoryService
 from .forms import ProductForm, ProductModeratorForm
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = "catalog/categories_list.html"
+    context_object_name = "categories"
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = "catalog/category_detail.html"
+    context_object_name = "category"
+    def get_context_data(self, **kwargs):
+        # Получаем объекты продуктов и категории
+        products = CategoryService.get_products_from_category(category=self.object)
+        categories = CategoryService.get_all_categories()
+        return super().get_context_data(products=products, categories=categories, **kwargs)
 
 
 class ProductListView(ListView):
@@ -17,13 +37,23 @@ class ProductListView(ListView):
     )
     context_object_name = "products"
 
-    def get_queryset(self):  # фильтрация продуктов по опубликованным
+    def get_queryset(self):
+        # Проверка наличия кэша
+        cached_products = cache.get("products")
+        if cached_products:
+            return cached_products
+        # Если кэша нет, получаем объекты из базы и кешируем их
+        products = Product.objects.all()
+        cache.set("products", products, 60 * 5)  # Кэширование на 5 минут
         user = self.request.user
+        # фильтрация продуктов по опубликованным
         if user.has_perm("catalog.can_unpublish_product"):
             return Product.objects.all()
         return Product.objects.filter(is_publish=True)
 
 
+
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product_detail.html"
