@@ -1,0 +1,23 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+
+{% block title %}Информация о продукте{% endblock %}
+
+{% block content %}
+<div class="card m-3">
+    <img src="{{ product.image | media_filter }}" class="card-img-top w-50" alt="{{ product.name }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="lead">Цена: {{ product.price }} руб.</p>
+        <p class="card-text">{{ product.description }}</p>
+        <p class="card-text">Категория: {{ product.category }}</p>
+        <p class="card-text"><small class="text-body-secondary">Last updated {{ product.updated_at }}</small></p>
+        <p class="card-text"><small class="text-body-secondary">Продавец: {{ product.owner }}</small></p>
+        <a href="{% url 'catalog:home' %}" class="btn btn-primary">Вернуться назад</a>
+        {% if perms.catalog.can_unpublish_product or user == product.owner %}
+        <a href="{% url 'catalog:edit_product' product.pk %}" class="btn btn-secondary">Изменить</a>
+        <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
