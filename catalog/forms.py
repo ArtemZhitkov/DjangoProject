@@ -1,13 +1,10 @@
-import os
-
 from django import forms
-from dotenv import load_dotenv
 
 from catalog.models import Product
+from config.settings import FORBIDDEN_WORDS
 
-load_dotenv()
-
-FORBIDDEN_WORDS = os.getenv("FORBIDDEN_WORDS").split(", ")
+if FORBIDDEN_WORDS:
+    FORBIDDEN_WORDS.split(", ")
 
 
 class StyleFormMixin:

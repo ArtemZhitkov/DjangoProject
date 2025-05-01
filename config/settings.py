@@ -154,3 +154,5 @@ if "test" in sys.argv:
             "NAME": os.path.join(BASE_DIR, "test_db.sqlite3"),
         }
     }
+
+FORBIDDEN_WORDS = os.getenv("FORBIDDEN_WORDS")
