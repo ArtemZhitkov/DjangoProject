@@ -52,9 +52,7 @@ class Migration(migrations.Migration):
                 ("description", models.TextField(verbose_name="Описание продукта")),
                 (
                     "price",
-                    models.DecimalField(
-                        decimal_places=2, max_digits=10, verbose_name="Цена"
-                    ),
+                    models.DecimalField(decimal_places=2, max_digits=10, verbose_name="Цена"),
                 ),
                 (
                     "stock",

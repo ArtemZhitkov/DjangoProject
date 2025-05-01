@@ -25,8 +25,8 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
-line_length = 119
+line_length = 120
 
 
 [tool.black]
-line-length = 119
+line-length = 120

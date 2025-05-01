@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
 from catalog.models import Product, Category
 from .services import CategoryService
@@ -18,10 +17,12 @@ class CategoryListView(ListView):
     template_name = "catalog/categories_list.html"
     context_object_name = "categories"
 
+
 class CategoryDetailView(DetailView):
     model = Category
     template_name = "catalog/category_detail.html"
     context_object_name = "category"
+
     def get_context_data(self, **kwargs):
         # Получаем объекты продуктов и категории
         products = CategoryService.get_products_from_category(category=self.object)
@@ -32,9 +33,7 @@ class CategoryDetailView(DetailView):
 class ProductListView(ListView):
     model = Product
     paginate_by = 3  # Количество продуктов на странице
-    template_name = (
-        "catalog/products_list.html"  # Имя шаблона для отображения списка продуктов
-    )
+    template_name = "catalog/products_list.html"  # Имя шаблона для отображения списка продуктов
     context_object_name = "products"
 
     def get_queryset(self):
@@ -52,8 +51,7 @@ class ProductListView(ListView):
         return Product.objects.filter(is_publish=True)
 
 
-
-@method_decorator(cache_page(60 * 5), name='dispatch')
+@method_decorator(cache_page(60 * 5), name="dispatch")
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalog/product_detail.html"

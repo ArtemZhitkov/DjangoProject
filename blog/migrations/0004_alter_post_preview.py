@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0003_alter_post_published_alter_post_views_count'),
+        ("blog", "0003_alter_post_published_alter_post_views_count"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='preview',
-            field=models.ImageField(upload_to='images/', verbose_name='Изображение'),
+            model_name="post",
+            name="preview",
+            field=models.ImageField(upload_to="images/", verbose_name="Изображение"),
         ),
     ]

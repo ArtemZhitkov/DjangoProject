@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0002_alter_post_preview'),
+        ("blog", "0002_alter_post_preview"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='published',
+            model_name="post",
+            name="published",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='views_count',
+            model_name="post",
+            name="views_count",
             field=models.IntegerField(default=0),
         ),
     ]

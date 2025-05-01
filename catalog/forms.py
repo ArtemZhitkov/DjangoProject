@@ -43,6 +43,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             raise forms.ValidationError("Описание продукта содержит запрещенные слова.")
         return description
 
+
 class ProductModeratorForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
