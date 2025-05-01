@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -142,5 +143,13 @@ if CACHE_ENABLED:
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
             'LOCATION': os.getenv('LOCATION'),
+        }
+    }
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backend.sqlite3',
+            'NAME': BASE_DIR / 'test_db.sqlite3',
         }
     }
